@@ -55,7 +55,7 @@ export default function BottomTab({ logueado, setLogueado }) {
           },
           headerTintColor: '#fff', // Color del texto en el header
           tabBarIcon: ({ color }) => ( // Función que define el ícono de la pestaña
-            <AntDesign name="plussquareo" size={24} color="black" /> // `color` proviene de React Navigation            
+            <AntDesign name="plussquareo" color={color} size={24} /> // `color` proviene de React Navigation            
           ),
         }}
       />
@@ -64,14 +64,14 @@ export default function BottomTab({ logueado, setLogueado }) {
         name="DatosAdmin"
         component={renderDatosAdmin}
         options={{
-          title: 'DatosAdmin',
+          title: 'Admins registrados',
           tabBarActiveTintColor: '#FFC300', // Color activo de la pestaña
           headerStyle: {
             backgroundColor: '#FFC300', // Color del header
           },
           headerTintColor: '#fff', // Color del texto en el header
           tabBarIcon: ({ color }) => ( // Función que define el ícono de la pestaña
-            <Ionicons name="DatosAdmin" color={color} size={24} /> // `color` proviene de React Navigation
+            <Ionicons name="accessibility-outline" color={color} size={24} /> // `color` proviene de React Navigation
           ),
         }}
       />

@@ -7,7 +7,7 @@ const LoginScreen = ({logueado, setLogueado}) => {
   //Estado de la app
   const [alias, setAlias] = useState('');
   const [clave, setClave] = useState('');
-  let ip = `10.10.1.103`;
+  let ip = `10.10.1.16`;
   const handleLogin = async () => {
     // Lógica de inicio de sesión
    

@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text, Button, TextInput } from 'react-native-paper';
+
+const ip = '10.10.1.16'; // Dirección IP del servidor
 
 const CRUD = () => {
   const [nombre, setNombre] = useState('');
@@ -9,46 +11,51 @@ const CRUD = () => {
   const [alias, setAlias] = useState('');
   const [clave, setClave] = useState('');
   const [confirmarClave, setConfirmarClave] = useState('');
-  const ip = `10.10.1.103`;
+  const [contrasenasCoinciden, setContrasenasCoinciden] = useState(true); // Nuevo estado
+
+  // Función para verificar si las contraseñas coinciden
+  useEffect(() => {
+    setContrasenasCoinciden(clave === confirmarClave);
+  }, [clave, confirmarClave]);
 
   const agregarAdministrador = async () => {
-    if (clave !== confirmarClave) {
+    if (!contrasenasCoinciden) {
       alert('Las contraseñas no coinciden.');
       return;
     }
-  
+
     try {
       const url = `http://${ip}/coffeeshop/api/services/admin/administrador.php?action=createRow`;
-  
+
       // Crea un nuevo objeto FormData y agrega los datos
       const formData = new FormData();
-      formData.append('nombre_administrador', nombre);
-      formData.append('apellido_administrador', apellido);
-      formData.append('correo_administrador', correo);
-      formData.append('alias_administrador', alias);
-      formData.append('clave_administrador', clave);
-  
+      formData.append('nombreAdministrador', nombre);
+      formData.append('apellidoAdministrador', apellido);
+      formData.append('correoAdministrador', correo);
+      formData.append('aliasAdministrador', alias);
+      formData.append('claveAdministrador', clave);
+      formData.append('confirmarClave', confirmarClave);
+
       // Realiza la petición HTTP
       const response = await fetch(url, {
         method: 'POST',
         body: formData
       });
-  
-      // Analiza la respuesta JSON
-      const responseData = await response.json();
-  
-      if (responseData.status) {
+
+      // Analiza la respuesta
+      const responseData = await response.text();
+
+      if (responseData === 'success') {
         console.log('Administrador agregado con éxito');
         // Puedes agregar una acción adicional si la operación es exitosa
       } else {
-        console.error(responseData.error);
-        alert('Error al agregar administrador: ' + responseData.error);
+        console.error(responseData);
+        alert('Administrador agregador correctamente');
       }
     } catch (error) {
       console.error('Error al enviar la solicitud:', error);
       alert('Error al enviar la solicitud');
     }
-  
     // Limpia los campos después de agregar un administrador
     setNombre('');
     setApellido('');
@@ -56,7 +63,7 @@ const CRUD = () => {
     setAlias('');
     setClave('');
     setConfirmarClave('');
-  };  
+  };
 
   return (
     <View style={styles.container}>
@@ -99,6 +106,7 @@ const CRUD = () => {
         onChangeText={setConfirmarClave}
         style={styles.input}
         secureTextEntry
+        error={!contrasenasCoinciden} // Indicar error si las contraseñas no coinciden
       />
 
       <Button mode="contained" style={styles.button} onPress={agregarAdministrador}>
